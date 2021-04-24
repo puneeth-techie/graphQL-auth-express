@@ -1,3 +1,4 @@
+/** All user related resolvers */
 const userResolver = {
   Query: {
     hello: () => {

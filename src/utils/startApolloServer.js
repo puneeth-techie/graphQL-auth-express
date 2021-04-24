@@ -3,7 +3,9 @@ import userTypeDefs from "../graphql/typedefs/user.typedefs.js";
 import userResolver from "../graphql/resolvers/user.resolvers.js";
 import app from "../startup/app.js";
 
+/** starting apollo server */
 const startApolloServer = async () => {
+  /** instantiating ApolloServer object */
   const server = new ApolloServer({
     typeDefs: [userTypeDefs],
     resolvers: [userResolver],
@@ -17,6 +19,8 @@ const startApolloServer = async () => {
           },
   });
   await server.start();
+
+  /** providing express middleware */
   server.applyMiddleware({ app });
 };
 
