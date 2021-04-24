@@ -16,19 +16,23 @@ const userResolver = {
         abortEarly: true,
       });
       if (error) {
-        throw new Error("Email does not exist. Please register");
+        throw new Error(error);
       } else {
         const { email, password } = args;
         const user = await User.findOne({ email });
-        const verifyPassword = await bcrypt.compare(password, user.password);
-        if (verifyPassword) {
-          const tokens = issueTokens(user);
-          return {
-            user,
-            ...tokens,
-          };
+        if (!user) {
+          throw new Error("Invalid email. Please register");
         } else {
-          throw new Error("Incorrect password.");
+          const verifyPassword = await bcrypt.compare(password, user.password);
+          if (verifyPassword) {
+            const tokens = issueTokens(user);
+            return {
+              user,
+              ...tokens,
+            };
+          } else {
+            throw new Error("Incorrect password.");
+          }
         }
       }
     },
