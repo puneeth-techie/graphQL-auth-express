@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import User from "../models/user.model.js";
 
 const issueTokens = ({ name, email, _id }) => {
   const accessToken = jwt.sign({ name, email, _id }, process.env.ACCESS_TOKEN, {
@@ -12,4 +13,18 @@ const issueTokens = ({ name, email, _id }) => {
   return { accessToken, refreshToken };
 };
 
-export default issueTokens;
+const getUser = async (token) => {
+  if (!token) {
+    throw new Error("No Access Token. Authorization header required.");
+  } else {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      throw new Error("Invalid Token. Please login and get access token");
+    } else {
+      return user;
+    }
+  }
+};
+
+export { issueTokens, getUser };

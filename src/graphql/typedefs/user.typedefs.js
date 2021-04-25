@@ -23,6 +23,7 @@ const userTypeDefs = gql`
 
   type Query {
     userLogin(email: String!, password: String!): Auth!
+    profile: User
   }
   type Mutation {
     registerUser(user: UserInput): Auth!

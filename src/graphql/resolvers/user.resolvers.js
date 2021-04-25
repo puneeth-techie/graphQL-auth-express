@@ -2,7 +2,7 @@ import {
   registerValidate,
   loginValidate,
 } from "../../utils/validatorSchema.js";
-import issueTokens from "../../utils/generateToken.js";
+import { issueTokens } from "../../utils/generateToken.js";
 import User from "../../models/user.model.js";
 import bcrypt from "bcryptjs";
 
@@ -35,6 +35,10 @@ const userResolver = {
           }
         }
       }
+    },
+    profile: async (_parent, args, context, _info) => {
+      if (!context.user) throw new Error("Invalid token. Please login.");
+      return context.user;
     },
   },
 
