@@ -27,4 +27,18 @@ const getUser = async (token) => {
   }
 };
 
-export { issueTokens, getUser };
+const getRefreshToken = async (rToken) => {
+  if (!rToken) {
+    throw new Error("No Refresh Token header.");
+  } else {
+    const decoded = jwt.verify(rToken, process.env.REFRESH_TOKEN);
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      throw new Error("Invalid Token. Please login and get access token");
+    } else {
+      return user;
+    }
+  }
+};
+
+export { issueTokens, getUser, getRefreshToken };
