@@ -2,14 +2,16 @@ import {
   registerValidate,
   loginValidate,
 } from "../../utils/validatorSchema.js";
-import { issueTokens } from "../../utils/generateToken.js";
+import { issueTokens, getRefreshToken } from "../../utils/generateToken.js";
 import User from "../../models/user.model.js";
 import bcrypt from "bcryptjs";
 
 /** All user related resolvers */
 const userResolver = {
   Query: {
-    /** Login user */
+    /** Login user
+     * @access  private
+     */
     userLogin: async (_parent, args, _context, _info) => {
       /** validate the login info */
       const { error } = await loginValidate.validateAsync(args, {
@@ -36,9 +38,39 @@ const userResolver = {
         }
       }
     },
+    /** Profile
+     * @access  private
+     */
     profile: async (_parent, args, context, _info) => {
       if (!context.user) throw new Error("Invalid token. Please login.");
       return context.user;
+    },
+    /** Refresh Token
+     * @access  private
+     */
+    refreshToken: async (_parent, args, context, _info) => {
+      if (!context.user) throw new Error("Invalid token. Please login.");
+      const loggedUser = await context.user;
+      const tokens = issueTokens(loggedUser);
+      return {
+        user: loggedUser,
+        ...tokens,
+      };
+    },
+    /**All Users List
+     * @access  Admin
+     */
+    usersList: async (_parent, args, context, _info) => {
+      if (!context.user)
+        throw new Error("Invalid token. Please login as admin.");
+      const adminInfo = await context.user;
+      if (adminInfo.isAdmin === true) {
+        const usersList = await User.find({ isAdmin: false });
+        return usersList;
+      } else {
+        const error = new Error("Admin access required.");
+        return error;
+      }
     },
   },
 

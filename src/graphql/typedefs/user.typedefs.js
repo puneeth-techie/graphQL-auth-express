@@ -24,6 +24,8 @@ const userTypeDefs = gql`
   type Query {
     userLogin(email: String!, password: String!): Auth!
     profile: User
+    refreshToken: Auth
+    usersList: [User]
   }
   type Mutation {
     registerUser(user: UserInput): Auth!
