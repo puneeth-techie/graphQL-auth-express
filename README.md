@@ -1,4 +1,4 @@
-# Implementing User registration and authentication mechanism along with JWT access token and refresh token mechanism for the authenticated user using [**Node**](https://nodejs.org/en/), [**Express**](https://expressjs.com/), [**GraphQL**](https://en.wikipedia.org/wiki/GraphQL)
+# Implemented User registration and authentication mechanism along with JWT access token and refresh token mechanism using [**Node**](https://nodejs.org/en/), [**Express**](https://expressjs.com/), [**GraphQL**](https://en.wikipedia.org/wiki/GraphQL)
 
 ## About [GraphQL](https://graphql.org/)
 
